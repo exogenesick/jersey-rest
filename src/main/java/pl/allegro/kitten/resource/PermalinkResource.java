@@ -1,5 +1,9 @@
 package pl.allegro.kitten.resource;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.allegro.kitten.model.Permalink;
@@ -14,6 +18,7 @@ import java.net.URI;
 
 @Component
 @Path("/permalinks")
+@Api(value = "/permalinks", description = "Source URL redirect to Destination URL")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class PermalinkResource {
 
@@ -26,6 +31,11 @@ public class PermalinkResource {
 
     @GET
     @Path("/{sourceUrl}")
+    @ApiOperation(value = "Get permalink by source URL", response = Permalink.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Permalink resource"),
+        @ApiResponse(code = 404, message = "Permalink not found")
+    })
     public Response get(@PathParam("sourceUrl") String sourceUrl) {
         Permalink permalink = permalinkManager.get(sourceUrl);
 
@@ -37,6 +47,10 @@ public class PermalinkResource {
     }
 
     @POST
+    @ApiOperation(value = "Create new permalink")
+    @ApiResponses(value = {
+        @ApiResponse(code = 201, message = "Permalink created successfully"),
+    })
     public Response create(@Context UriInfo uriInfo, Permalink permalink) throws Exception {
         permalinkManager.set(permalink);
 
@@ -45,6 +59,11 @@ public class PermalinkResource {
 
     @DELETE
     @Path("/{sourceUrl}")
+    @ApiOperation(value = "Delete permalink with source URL")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Permalink deleted successfully"),
+            @ApiResponse(code = 404, message = "Permalink not found")
+    })
     public Response delete(@PathParam("sourceUrl") String sourceUrl) {
         Permalink permalink = permalinkManager.get(sourceUrl);
 

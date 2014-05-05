@@ -1,8 +1,11 @@
 package pl.allegro.kitten.model;
 
+import com.wordnik.swagger.annotations.ApiModel;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+@ApiModel(value = "Source URL redirect to Destination URL")
+@XmlRootElement(name = "Permalink")
 public class Permalink {
 
     private String sourceUrl;
