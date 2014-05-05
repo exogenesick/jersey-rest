@@ -26,13 +26,34 @@ public class PermalinkResource {
 
     @GET
     @Path("/{sourceUrl}")
-    public Permalink get(@PathParam("sourceUrl") String sourceUrl) {
-        return permalinkManager.get(sourceUrl);
+    public Response get(@PathParam("sourceUrl") String sourceUrl) {
+        Permalink permalink = permalinkManager.get(sourceUrl);
+
+        if (null == permalink) {
+            return Response.status(404).build();
+        }
+
+        return Response.ok().entity(permalink).build();
     }
 
     @POST
     public Response create(@Context UriInfo uriInfo, Permalink permalink) throws Exception {
         permalinkManager.set(permalink);
+
         return Response.created(URI.create(uriInfo.getAbsolutePath().toString() + "/" + permalink.getSourceUrl())).build();
+    }
+
+    @DELETE
+    @Path("/{sourceUrl}")
+    public Response delete(@PathParam("sourceUrl") String sourceUrl) {
+        Permalink permalink = permalinkManager.get(sourceUrl);
+
+        if (null == permalink) {
+            return Response.status(404).build();
+        }
+
+        permalinkManager.delete(permalink);
+
+        return Response.noContent().build();
     }
 }

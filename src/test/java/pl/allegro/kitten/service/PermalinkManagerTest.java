@@ -42,6 +42,12 @@ public class PermalinkManagerTest {
         }).when(valueOperationsMock).set(key, value);
 
         when(redisTemplateMock.opsForValue()).thenReturn(valueOperationsMock);
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+                return null;
+            }
+        }).when(redisTemplateMock).delete(key);
 
         permalinkManager = new PermalinkManager(redisTemplateMock);
     }
@@ -70,5 +76,16 @@ public class PermalinkManagerTest {
         permalinkManager.set(permalink);
 
         verify(valueOperationsMock, times(1)).set(key, value);
+    }
+
+    @Test
+    public void should_delete_permalink() throws Exception {
+        Permalink permalink = new Permalink();
+        permalink.setSourceUrl(key);
+        permalink.setDestinationUrl(value);
+
+        permalinkManager.delete(permalink);
+
+        verify(redisTemplateMock, times(1)).delete(key);
     }
 }

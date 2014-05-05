@@ -34,4 +34,8 @@ public class PermalinkManager {
 
         redisTemplate.opsForValue().set(permalink.getSourceUrl(), permalink.getDestinationUrl());
     }
+
+    public void delete(Permalink permalink) {
+        redisTemplate.delete(permalink.getSourceUrl());
+    }
 }
