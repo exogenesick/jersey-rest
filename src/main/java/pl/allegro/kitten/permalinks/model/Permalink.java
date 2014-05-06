@@ -1,4 +1,4 @@
-package pl.allegro.kitten.model;
+package pl.allegro.kitten.permalinks.model;
 
 import com.wordnik.swagger.annotations.ApiModel;
 

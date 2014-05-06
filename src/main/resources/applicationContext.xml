@@ -10,7 +10,7 @@
 
     <import resource="redis.xml" />
 
-    <bean id="permalinkManager" class="pl.allegro.kitten.service.PermalinkManager" />
+    <bean id="permalinkManager" class="pl.allegro.kitten.permalinks.service.PermalinkManager" />
 
     <beans profile="local">
         <context:property-placeholder location="classpath:local.properties" />

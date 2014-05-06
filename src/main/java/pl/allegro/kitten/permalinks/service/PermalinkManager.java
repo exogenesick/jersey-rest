@@ -1,8 +1,8 @@
-package pl.allegro.kitten.service;
+package pl.allegro.kitten.permalinks.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import pl.allegro.kitten.model.Permalink;
+import pl.allegro.kitten.permalinks.model.Permalink;
 
 public class PermalinkManager {
 
@@ -27,9 +27,9 @@ public class PermalinkManager {
         return permalink;
     }
 
-    public void set(Permalink permalink) throws Exception {
+    public void set(Permalink permalink) throws PermalinkInvalidException {
         if (null == permalink.getSourceUrl() || null == permalink.getDestinationUrl()) {
-            throw new Exception("Permalink is not valid.");
+            throw new PermalinkInvalidException("Permalink is not valid.");
         }
 
         redisTemplate.opsForValue().set(permalink.getSourceUrl(), permalink.getDestinationUrl());

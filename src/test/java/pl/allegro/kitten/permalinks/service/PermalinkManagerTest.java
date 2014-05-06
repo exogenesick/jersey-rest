@@ -1,4 +1,4 @@
-package pl.allegro.kitten.service;
+package pl.allegro.kitten.permalinks.service;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -6,7 +6,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import pl.allegro.kitten.model.Permalink;
+import pl.allegro.kitten.permalinks.model.Permalink;
 
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertEquals;
