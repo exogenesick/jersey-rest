@@ -5,7 +5,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import pl.allegro.kitten.permalinks.model.Permalink;
 import pl.allegro.kitten.permalinks.service.PermalinkManager;
 
@@ -15,17 +15,21 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
 
-@Component
+@Controller
 @Path("/permalinks")
 @Api(value = "/permalinks", description = "Source URL redirect to Destination URL")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class PermalinkResource {
 
+    @Autowired
     private PermalinkManager permalinkManager;
 
-    @Autowired
+    public PermalinkResource() {}
+
     public PermalinkResource(PermalinkManager permalinkManager) {
         this.permalinkManager = permalinkManager;
     }
@@ -53,14 +57,17 @@ public class PermalinkResource {
         @ApiResponse(code = HttpServletResponse.SC_CREATED, message = "Permalink created successfully"),
         @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, message = "Bad request"),
     })
-    public Response create(@Context UriInfo uriInfo, Permalink permalink) {
+    public Response create(@Context UriInfo uriInfo, Permalink permalink) throws UnsupportedEncodingException {
         try {
             permalinkManager.set(permalink);
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        return Response.created(URI.create(uriInfo.getAbsolutePath().toString() + "/" + permalink.getSourceUrl())).build();
+        String resourceURL = URLEncoder.encode(permalink.getSourceUrl(), "UTF-8");
+        URI resourceURI = URI.create(uriInfo.getAbsolutePath().toString() + "/" + resourceURL);
+
+        return Response.created(resourceURI).build();
     }
 
     @DELETE

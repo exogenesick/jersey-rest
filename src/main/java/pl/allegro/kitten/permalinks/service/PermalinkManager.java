@@ -1,30 +1,30 @@
 package pl.allegro.kitten.permalinks.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
 import pl.allegro.kitten.permalinks.model.Permalink;
+import pl.allegro.kitten.permalinks.repository.PermalinkRepository;
 
+@Service
 public class PermalinkManager {
 
-    private StringRedisTemplate redisTemplate;
-
     @Autowired
-    public PermalinkManager(StringRedisTemplate redisTemplate) {
-        this.redisTemplate = redisTemplate;
+    private PermalinkRepository permalinkRepository;
+
+    public PermalinkManager() {}
+
+    public PermalinkManager(PermalinkRepository permalinkRepository) {
+        this.permalinkRepository = permalinkRepository;
     }
 
     public Permalink get(String sourceUrl) {
-        String destinationUrl = redisTemplate.opsForValue().get(sourceUrl);
+        String destinationUrl = permalinkRepository.findDestinationUrlBySourceUrl(sourceUrl);
 
         if (null == destinationUrl) {
             return null;
         }
 
-        Permalink permalink = new Permalink();
-        permalink.setSourceUrl(sourceUrl);
-        permalink.setDestinationUrl(destinationUrl);
-
-        return permalink;
+        return new Permalink(sourceUrl, destinationUrl);
     }
 
     public void set(Permalink permalink) throws PermalinkInvalidException {
@@ -32,10 +32,10 @@ public class PermalinkManager {
             throw new PermalinkInvalidException("Permalink is not valid.");
         }
 
-        redisTemplate.opsForValue().set(permalink.getSourceUrl(), permalink.getDestinationUrl());
+        permalinkRepository.save(permalink.getSourceUrl(), permalink.getDestinationUrl());
     }
 
     public void delete(Permalink permalink) {
-        redisTemplate.delete(permalink.getSourceUrl());
+        permalinkRepository.deleteBySourceUrl(permalink.getSourceUrl());
     }
 }

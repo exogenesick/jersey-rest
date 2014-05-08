@@ -10,17 +10,6 @@
 
     <import resource="redis.xml" />
 
-    <bean id="permalinkManager" class="pl.allegro.kitten.permalinks.service.PermalinkManager" />
+    <context:property-placeholder location="classpath:test.properties" />
 
-    <beans profile="local">
-        <context:property-placeholder location="classpath:local.properties" />
-    </beans>
-
-    <beans profile="test">
-        <context:property-placeholder location="classpath:test.properties" />
-    </beans>
-
-    <beans profile="production">
-        <context:property-placeholder location="classpath:production.properties" />
-    </beans>
 </beans>

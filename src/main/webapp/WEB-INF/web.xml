@@ -12,7 +12,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:applicationContext.xml</param-value>
+        <param-value>classpath:application-context.xml</param-value>
     </context-param>
 
     <listener>
@@ -42,7 +42,7 @@
         </init-param>
         <init-param>
             <param-name>swagger.api.basepath</param-name>
-            <param-value>http://localhost:8080/api</param-value>
+            <param-value>/</param-value>
         </init-param>
         <load-on-startup>2</load-on-startup>
     </servlet>

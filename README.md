@@ -7,8 +7,13 @@ Project contains:
 * [Spring][4] (IoC, Profiles)
 * Redis integration with [Jedis][8] ([Spring Data][5])
 * [Swagger for Jersey][6] API documentation with [Swagger UI][7]
+* Integration tests with [Jersey Test Framework][11] support ([Grizzly][12] as HTTP container)
 
-## Usage (launch)
+## Test (unit & integration)
+
+    mvn test
+
+## Usage
 
     mvn clean package -Dspring.profiles.active="local" jetty:run
 
@@ -26,3 +31,5 @@ Project contains:
 [8]: https://github.com/xetorthio/jedis
 [9]: https://jax-rs-spec.java.net/
 [10]: http://docs.codehaus.org/display/JETTY/Maven+Jetty+Plugin
+[11]: https://jersey.java.net/documentation/latest/test-framework.html
+[12]: https://grizzly.java.net/
